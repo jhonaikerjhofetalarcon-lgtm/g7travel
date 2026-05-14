@@ -12,4 +12,6 @@ public final class FirestoreCollections {
   public static final String CONTACTO = "contactoMenssages";
   public static final String AUTOS = "autos";
   public static final String ASIENTOS = "asientos";
+  public static final String OFERTAS = "ofertas";
+  public static final String PAQUETES = "paquetes";
 }

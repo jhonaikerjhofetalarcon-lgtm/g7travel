@@ -12,7 +12,7 @@
       <a routerLink="/reservas"  routerLinkActive="activo" class="nav-cta" (click)="menuOpen=false">Reservar ahora</a>
       <a routerLink="/contacto"  routerLinkActive="activo" (click)="menuOpen=false">Contacto</a>
       @if (isLoggedIn) {
-        <a routerLink="/users" routerLinkActive="activo" (click)="menuOpen=false">Panel Admin</a>
+        <a routerLink="/dash" routerLinkActive="activo" (click)="menuOpen=false">Panel Admin</a>
       } @else {
         <a routerLink="/login" routerLinkActive="activo" (click)="menuOpen=false">Ingresar</a>
       }

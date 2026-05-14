@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/Auth.guard';
 
-
 export const routes: Routes = [
-
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
+  // ====================== RUTAS PÚBLICAS ======================
   {
     path: 'login',
     loadComponent: () => import('./pages/login/login').then(m => m.Login),
@@ -31,11 +30,58 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contacto/contacto').then(m => m.Contacto),
   },
 
+  // ====================== DASHBOARD ADMIN (Protegido) ======================
   {
-    path: 'users',
-    loadComponent: () => import('./pages/users/users').then(m => m.Users),
+    path: 'dash',
+    loadComponent: () => import('./dash/dashboard/dashboard').then(m => m.Dashboard),
     canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'overview', pathMatch: 'full' },
+
+      { 
+        path: 'overview', 
+        loadComponent: () => import('./dash/dashboard/dashboard').then(m => m.Dashboard) 
+      }, // Reutilizamos el mismo componente para overview
+
+      { 
+        path: 'usuarios', 
+        loadComponent: () => import('./dash/users/users').then(m => m.Users) 
+      },
+      { 
+        path: 'destinos', 
+        loadComponent: () => import('./dash/destinos/destinos').then(m => m.Destinos) 
+      },
+      { 
+        path: 'tours', 
+        loadComponent: () => import('./dash/tours/tours').then(m => m.Tours) 
+      },
+      { 
+        path: 'reservas', 
+        loadComponent: () => import('./dash/reservas/reservas').then(m => m.Reservas) 
+      },
+      { 
+        path: 'pagos', 
+        loadComponent: () => import('./dash/pagos/pagos').then(m => m.Pagos) 
+      },
+      { 
+        path: 'autos', 
+        loadComponent: () => import('./dash/autos/autos').then(m => m.Autos) 
+      },
+      { 
+        path: 'asientos', 
+        loadComponent: () => import('./dash/asientos/asientos').then(m => m.Asientos) 
+      },
+      {
+        path: 'ofertas',
+        loadComponent: () => import('./dash/ofertas/ofertas').then(m => m.Ofertas)
+      },
+      {
+        path: 'paquetes',
+        loadComponent: () => import('./dash/paquetes/paquetes').then(m => m.Paquetes)
+      },
+    ]
   },
 
-  { path: '**', redirectTo: 'login' },
+  // Ruta comodín (última)
+  { path: '**', redirectTo: 'home' }
 ];

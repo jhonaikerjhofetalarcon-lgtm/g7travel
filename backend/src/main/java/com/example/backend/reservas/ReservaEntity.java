@@ -34,7 +34,6 @@ public class ReservaEntity {
   @Max(20)
   private int pasajeros;
 
-  // ⚠ Sin @NotBlank — notas es opcional
   private String notas;
 
   private Instant createdAt;

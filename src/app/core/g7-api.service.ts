@@ -3,6 +3,48 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+
+
+
+export interface PaqueteDto {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  presio: number;
+  id_paquete: string;
+  imagenes: string;
+  estado: boolean;
+}
+
+export interface OfertaDto {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  descuento: number;
+  fechaInicio: string;
+  fechaFin: string;
+  estado: boolean;
+  paqueteId: string;
+}
+
+export interface PaqueteCreatePayload {
+  titulo: string;
+  descripcion: string;
+  presio: number;
+  id_paquete: string;
+  imagenes: string;
+}
+
+export interface OfertaCreatePayload {
+  titulo: string;
+  descripcion: string;
+  descuento: number;
+  fechaInicio: string;
+  fechaFin: string;
+  paqueteId: string;
+}
+
+
 export interface UserDto {
   id: string;
   nombre: string;
@@ -117,6 +159,34 @@ export interface PagoCreatePayload {
   comprobanteUrl: string;
 }
 
+export interface AutoDto {
+  id: string;
+  placa: string;
+  marca: string;
+  modelo: string;
+  color: string;
+  anioFabrica: number;
+  cantidadAsiento: number;
+  tipo: string;
+  conductor: string;
+  estado: string;
+}
+
+export interface AsientoDto {
+  id: string;
+  idAuto: string;
+  numeroAsiento: string;
+  estado: 'libre' | 'reservado' | 'ocupado';
+  idReserva?: string | null;
+}
+
+export interface AsientoCreatePayload {
+  idAuto: string;
+  numeroAsiento: string;
+  estado?: 'libre' | 'reservado' | 'ocupado';
+}
+
+
 export interface ResenaDto {
   id: string;
   tourId: string;
@@ -147,12 +217,10 @@ export class G7ApiService {
   private readonly http = inject(HttpClient);
   private readonly base = environment.apiUrl;
 
-  // ── Health ──────────────────────────────────────────────
   health(): Observable<{ status: string }> {
     return this.http.get<{ status: string }>(`${this.base}/health`);
   }
 
-  // ── Users ────────────────────────────────────────────────
   getUsers(): Observable<UserDto[]> {
     return this.http.get<UserDto[]>(`${this.base}/users`);
   }
@@ -173,12 +241,11 @@ export class G7ApiService {
     return this.http.delete<void>(`${this.base}/users/${encodeURIComponent(id)}`);
   }
 
-  // ── Destinos ─────────────────────────────────────────────
   getDestinos(): Observable<DestinoDto[]> {
     return this.http.get<DestinoDto[]>(`${this.base}/destinos`);
   }
 
-  // ── Tours ────────────────────────────────────────────────
+
   getTours(destinoId?: string): Observable<TourDto[]> {
     const url = destinoId
       ? `${this.base}/tours?destinoId=${encodeURIComponent(destinoId)}`
@@ -202,7 +269,7 @@ export class G7ApiService {
     return this.http.delete<void>(`${this.base}/tours/${encodeURIComponent(id)}`);
   }
 
-  // ── Reservas ─────────────────────────────────────────────
+
   getReservas(): Observable<ReservaDto[]> {
     return this.http.get<ReservaDto[]>(`${this.base}/reservas`);
   }
@@ -215,7 +282,6 @@ export class G7ApiService {
     return this.http.delete<void>(`${this.base}/reservas/${encodeURIComponent(id)}`);
   }
 
-  // ── Pagos ────────────────────────────────────────────────
   getPagos(reservaId?: string): Observable<PagoDto[]> {
     const url = reservaId
       ? `${this.base}/pagos?reservaId=${encodeURIComponent(reservaId)}`
@@ -231,7 +297,7 @@ export class G7ApiService {
     return this.http.patch<PagoDto>(`${this.base}/pagos/${encodeURIComponent(id)}/confirmar`, {});
   }
 
-  // ── Reseñas ──────────────────────────────────────────────
+
   getResenas(tourId?: string): Observable<ResenaDto[]> {
     const url = tourId
       ? `${this.base}/resenas?tourId=${encodeURIComponent(tourId)}`
@@ -247,8 +313,73 @@ export class G7ApiService {
     return this.http.patch<ResenaDto>(`${this.base}/resenas/${encodeURIComponent(id)}/verificar`, {});
   }
 
-  // ── Contacto ─────────────────────────────────────────────
+
   createContacto(body: ContactoCreatePayload): Observable<unknown> {
     return this.http.post(`${this.base}/contacto`, body);
   }
+
+getAutos(): Observable<AutoDto[]> {
+    return this.http.get<AutoDto[]>(`${this.base}/autos`);
+  }
+
+  createAuto(body: any): Observable<AutoDto> {
+    return this.http.post<AutoDto>(`${this.base}/autos`, body);
+  }
+
+  updateAuto(id: string, body: any): Observable<AutoDto> {
+    return this.http.put<AutoDto>(`${this.base}/autos/${encodeURIComponent(id)}`, body);
+  }
+
+  deleteAuto(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/autos/${encodeURIComponent(id)}`);
+  }
+
+  getAsientos(): Observable<AsientoDto[]> {
+    return this.http.get<AsientoDto[]>(`${this.base}/asientos`);
+  }
+
+  createAsiento(body: AsientoCreatePayload): Observable<AsientoDto> {
+    return this.http.post<AsientoDto>(`${this.base}/asientos`, body);
+  }
+
+  liberarAsiento(id: string): Observable<any> {
+    return this.http.patch(`${this.base}/asientos/${encodeURIComponent(id)}/liberar`, {});
+  }
+
+  deleteAsiento(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/asientos/${encodeURIComponent(id)}`);
+  }
+
+
+  getPaquetes(): Observable<PaqueteDto[]> {
+    return this.http.get<PaqueteDto[]>(`${this.base}/paquetes`);
+  }
+
+  createPaquete(body: PaqueteCreatePayload): Observable<PaqueteDto> {
+    return this.http.post<PaqueteDto>(`${this.base}/paquetes`, body);
+  }
+
+  deletePaquete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/paquetes/${encodeURIComponent(id)}`);
+  }
+
+
+  getOfertas(): Observable<OfertaDto[]> {
+    return this.http.get<OfertaDto[]>(`${this.base}/ofertas`);
+  }
+
+  getOfertasActivas(): Observable<OfertaDto[]> {
+    return this.http.get<OfertaDto[]>(`${this.base}/ofertas/activas`);
+  }
+
+  createOferta(body: OfertaCreatePayload): Observable<OfertaDto> {
+    return this.http.post<OfertaDto>(`${this.base}/ofertas`, body);
+  }
+
+  deleteOferta(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/ofertas/${encodeURIComponent(id)}`);
+  }
+
+
+
 }

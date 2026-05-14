@@ -33,8 +33,7 @@ public class TourService {
     e.setNombre(req.nombre());
     e.setDescripcion(req.descripcion());
     e.setDestinoId(req.destinoId());
-    e.setPrecioAdulto(req.precioAdulto());
-    e.setPrecioNino(req.precioNino());
+    e.setPrecio(req.precio());
     e.setDuracionDias(req.duracionDias());
     e.setCuposTotal(req.cuposTotal());
     e.setCuposDisponibles(req.cuposTotal());
@@ -52,8 +51,7 @@ public class TourService {
     e.setNombre(req.nombre());
     e.setDescripcion(req.descripcion());
     e.setDestinoId(req.destinoId());
-    e.setPrecioAdulto(req.precioAdulto());
-    e.setPrecioNino(req.precioNino());
+    e.setPrecio(req.precio());
     e.setDuracionDias(req.duracionDias());
     e.setCuposTotal(req.cuposTotal());
     e.setDificultad(req.dificultad());

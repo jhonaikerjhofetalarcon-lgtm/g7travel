@@ -113,33 +113,39 @@ public class DataInitializer implements CommandLineRunner {
 
     for (TourEntity t : List.of(
       tour("Machu Picchu Clásico", "Visita la ciudadela inca más famosa del mundo con guía especializado.",
-        idMachu, 450.0, 250.0, 3, 20, "moderado", "Transporte, hotel 2 noches, guía, entrada", "Comidas, vuelos",
+        idMachu, 450.0, 3, 20, "moderado", "Transporte, hotel 2 noches, guía, entrada", "Comidas, vuelos",
         "https://images.pexels.com/photos/259967/pexels-photo-259967.jpeg"),
       tour("Cusco Imperial", "Recorre el Qorikancha, Sacsayhuamán y el mercado de San Pedro.",
-        idCusco, 320.0, 180.0, 2, 15, "fácil", "Transporte, hotel 1 noche, guía, entradas", "Comidas, souvenirs",
+        idCusco, 320.0, 2, 15, "fácil", "Transporte, hotel 1 noche, guía, entradas", "Comidas, souvenirs",
         "https://images.pexels.com/photos/21014/pexels-photo.jpg"),
       tour("Lago Titicaca Ancestral", "Navega por el lago más alto del mundo y visita las islas flotantes.",
-        idTiti, 380.0, 200.0, 2, 12, "fácil", "Transporte, bote, hotel, guía", "Comidas personales",
+        idTiti, 380.0, 2, 12, "fácil", "Transporte, bote, hotel, guía", "Comidas personales",
         "https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg"),
       tour("Ayacucho Historia Viva", "Descubre la Pampa de Quinua, escenario de la Batalla de Ayacucho.",
-        idAyacu, 250.0, 130.0, 1, 25, "fácil", "Transporte, guía local, almuerzo típico", "Gastos personales",
+        idAyacu, 250.0, 1, 25, "fácil", "Transporte, guía local, almuerzo típico", "Gastos personales",
         "https://www.ytuqueplanes.com/imagenes/fotos/novedades/sierra-pampa-quinua.JPG"))) {
       tourRepo.save(t);
     }
   }
 
   private TourEntity tour(String nombre, String desc, String destinoId,
-                          double precioAdulto, double precioNino, int dias, int cupos,
+                          double precio, int dias, int cupos,
                           String dificultad, String incluye, String noIncluye, String imagenUrl) {
     TourEntity t = new TourEntity();
     t.setId(UUID.randomUUID().toString());
-    t.setNombre(nombre);       t.setDescripcion(desc);
-    t.setDestinoId(destinoId); t.setPrecioAdulto(precioAdulto);
-    t.setPrecioNino(precioNino); t.setDuracionDias(dias);
-    t.setCuposTotal(cupos);    t.setCuposDisponibles(cupos);
-    t.setDificultad(dificultad); t.setIncluye(incluye);
-    t.setNoIncluye(noIncluye); t.setImagenUrl(imagenUrl);
-    t.setActivo(true);         t.setCreadoEn(Instant.now());
+    t.setNombre(nombre);
+    t.setDescripcion(desc);
+    t.setDestinoId(destinoId);
+    t.setPrecio(precio);
+    t.setDuracionDias(dias);
+    t.setCuposTotal(cupos);
+    t.setCuposDisponibles(cupos);
+    t.setDificultad(dificultad);
+    t.setIncluye(incluye);
+    t.setNoIncluye(noIncluye);
+    t.setImagenUrl(imagenUrl);
+    t.setActivo(true);
+    t.setCreadoEn(Instant.now());
     return t;
   }
 }

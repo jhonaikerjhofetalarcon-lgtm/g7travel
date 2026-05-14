@@ -1,0 +1,54 @@
+<section class="section-content">
+
+    <div class="toolbar">
+        <div class="search-wrap">
+            <span class="si">🔍</span>
+            <input class="search-input" type="text" [(ngModel)]="busqueda" placeholder="Buscar reserva...">
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Destino</th>
+                        <th>Fechas</th>
+                        <th>Pasajeros</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (r of filtrados(); track r.id; let i = $index) {
+                    <tr>
+                        <td class="td-n">{{ i+1 }}</td>
+                        <td>
+                            <strong>{{ r.nombre }} {{ r.apellido }}</strong><br>
+                            <small>{{ r.email }}</small>
+                        </td>
+                        <td>{{ r.destino }}</td>
+                        <td>
+                            <small>Ida: {{ r.fechaIda | date:'shortDate' }}</small><br>
+                            <small>Vuelta: {{ r.fechaVuelta | date:'shortDate' }}</small>
+                        </td>
+                        <td><strong>{{ r.pasajeros }}</strong></td>
+                        <td class="td-act">
+                            <button class="btn-ico del" (click)="eliminar(r)" title="Eliminar">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                    @if (filtrados().length === 0) {
+                    <tr>
+                        <td colspan="6" class="td-empty">No hay reservas registradas</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>

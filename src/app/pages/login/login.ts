@@ -34,7 +34,7 @@ export class Login {
         this.cargando = false;
         // Solo admins acceden al panel
         if (user.rol === 'admin') {
-          this.router.navigate(['/users']);
+          this.router.navigate(['../dash/dashboard']);
         } else {
           // Conductores u otros roles van a home
           this.router.navigate(['/home']);

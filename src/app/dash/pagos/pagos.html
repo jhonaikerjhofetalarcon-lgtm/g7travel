@@ -1,0 +1,65 @@
+<section class="section-content">
+
+    <div class="toolbar">
+        <div class="search-wrap">
+            <span class="si">🔍</span>
+            <input class="search-input" type="text" [(ngModel)]="busqueda"
+                placeholder="Buscar por referencia o estado...">
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Reserva</th>
+                        <th>Monto</th>
+                        <th>Método</th>
+                        <th>Estado</th>
+                        <th>Referencia</th>
+                        <th>Fecha Pago</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (p of filtrados(); track p.id; let i = $index) {
+                    <tr>
+                        <td class="td-n">{{ i+1 }}</td>
+                        <td><code>{{ p.reservaId | slice:0:10 }}…</code></td>
+                        <td><strong>S/ {{ p.monto | number:'1.0-2' }}</strong></td>
+                        <td>{{ p.metodo }}</td>
+                        <td>
+                            <span class="badge" [class.b-ok]="p.estado==='completado'"
+                                [class.b-pend]="p.estado==='pendiente'" [class.b-err]="p.estado==='rechazado'">
+                                {{ p.estado }}
+                            </span>
+                        </td>
+                        <td>{{ p.referencia || '—' }}</td>
+                        <td>{{ p.fechaPago | date:'dd/MM/yy HH:mm' }}</td>
+                        <td class="td-act">
+                            @if (p.estado === 'pendiente') {
+                            <button class="btn-ico edit" (click)="confirmar(p)" title="Confirmar pago">✓</button>
+                            }
+                        </td>
+                    </tr>
+                    }
+                    @if (filtrados().length === 0) {
+                    <tr>
+                        <td colspan="8" class="td-empty">No hay pagos registrados</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mini-stats">
+        <div class="ms"><span>{{ pagos.length }}</span>Total</div>
+        <div class="ms"><span>S/ {{ totalMontoPagos() | number:'1.0-0' }}</span>Monto total</div>
+        <div class="ms"><span>{{ pagosCompletados() }}</span>Completados</div>
+        <div class="ms"><span>{{ pagosPendientes() }}</span>Pendientes</div>
+    </div>
+
+</section>

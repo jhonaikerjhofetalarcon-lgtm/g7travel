@@ -1,0 +1,47 @@
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="m-0">Gestión de Paquetes Turísticos</h2>
+        <button mat-raised-button color="primary">
+            <mat-icon>add</mat-icon> Nuevo Paquete
+        </button>
+    </div>
+
+    <div class="row g-4">
+        @for (item of listaPaquetes(); track item.id) {
+        <div class="col-md-4 col-lg-3">
+            <mat-card class="package-card shadow-sm h-100">
+                <div class="position-relative">
+                    <img mat-card-image [src]="item.imagenes || '../../../public/favorito.ico'" class="card-img">
+                    @if (item.oferta) {
+                    <span class="badge-discount">-{{ item.oferta.descuento }}%</span>
+                    }
+                </div>
+
+                <mat-card-content class="pt-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h3 class="package-title">{{ item.titulo }}</h3>
+                        <mat-chip [color]="item.estado ? 'primary' : 'warn'" selected class="status-chip">
+                            {{ item.estado ? 'Activo' : 'Inactivo' }}
+                        </mat-chip>
+                    </div>
+                    <p class="package-desc">{{ item.descripcion }}</p>
+
+                    <div class="price-section mt-3">
+                        @if (item.oferta) {
+                        <span class="old-price">S/. {{ item.presio }}</span>
+                        <div class="current-price text-success">S/. {{ item.precioFinal | number:'1.0-0' }}</div>
+                        } @else {
+                        <div class="current-price">S/. {{ item.presio }}</div>
+                        }
+                    </div>
+                </mat-card-content>
+
+                <mat-card-actions align="end">
+                    <button mat-icon-button color="primary"><mat-icon>edit</mat-icon></button>
+                    <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        }
+    </div>
+</div>

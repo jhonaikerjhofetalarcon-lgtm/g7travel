@@ -1,0 +1,112 @@
+        <section class="section-content">
+
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <span class="si">🔍</span>
+                    <input class="search-input" type="text" [(ngModel)]="busqueda"
+                        placeholder="Buscar por nombre o email…">
+                </div>
+                <button class="btn-primary" (click)="abrir()">+ Nuevo Usuario</button>
+            </div>
+
+            @if (formVisible) {
+            <div class="form-card">
+                <h3>{{ editingId ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+                <div class="form-grid">
+                    <div class="fg"><label>Nombre <span class="req">*</span></label>
+                        <input type="text" [(ngModel)]="fUsuario.nombre" placeholder="Nombre completo">
+                    </div>
+                    <div class="fg"><label>Email <span class="req">*</span></label>
+                        <input type="email" [(ngModel)]="fUsuario.email" placeholder="correo@ejemplo.com">
+                    </div>
+                    <div class="fg"><label>Teléfono <span class="req">*</span></label>
+                        <input type="tel" [(ngModel)]="fUsuario.telefono" placeholder="+51 999 999 999">
+                    </div>
+                    <div class="fg"><label>Rol</label>
+                        <select [(ngModel)]="fUsuario.rol">
+                            <option value="cliente">Conductor</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label>
+                            Contraseña
+                            @if (!editingId) { <span class="req">*</span> }
+                            @if (editingId) { <span class="hint">(vacío = no cambia)</span> }
+                        </label>
+                        <input type="password" [(ngModel)]="fUsuario.password"
+                            [placeholder]="editingId ? 'Dejar vacío para no cambiar' : 'Mínimo 6 caracteres'">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="cerrar()">Cancelar</button>
+                    <button class="btn-save" (click)="guardar()">{{ editingId ? 'Actualizar' : 'Crear Usuario'
+                        }}</button>
+                </div>
+            </div>
+            }
+
+            <div class="table-card">
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Rol</th>
+                                <th>Reservas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (u of filtrados(); track u.id; let i = $index) {
+                            <tr>
+                                <td class="td-n">{{ i+1 }}</td>
+
+                                <td>
+                                    <div class="cell-user">
+                                        <div class="avatar" [style.background]="avatarColor(u.nombre)">
+                                            {{ u.nombre.charAt(0).toUpperCase() }}
+                                        </div>
+                                        <span>{{ u.nombre }}</span>
+                                    </div>
+                                </td>
+
+                                <td>{{ u.email }}</td>
+                                <td>{{ u.telefono }}</td>
+
+                                <td>
+                                    <span class="badge" [class.b-admin]="u.rol==='admin'"
+                                        [class.b-conductor]="u.rol==='conductor'">
+                                        {{ u.rol }}
+                                    </span>
+                                </td>
+
+                                <td class="td-act">
+                                    <button class="btn-ico edit" (click)="abrirEditar(u)"
+                                        title="Editar">✏️</button>
+                                    <button class="btn-ico del" (click)="eliminar(u)"
+                                        title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            }
+                            @if (filtrados().length === 0) {
+                            <tr>
+                                <td colspan="7" class="td-empty">{{ busqueda ? 'Sin resultados para "'+busqueda+'"' :
+                                    'No hay usuarios registrados' }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mini-stats">
+                <div class="ms"><span>{{ usuarios.length }}</span>Total</div>
+                <div class="ms"><span>{{ totalAdmins() }}</span>Admins</div>
+                <div class="ms"><span>{{ totalConductores() }}</span>Conductor</div>
+            </div>
+
+        </section>

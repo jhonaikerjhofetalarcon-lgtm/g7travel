@@ -1,0 +1,113 @@
+
+        <section class="section-content">
+
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <span class="si">🔍</span>
+                    <input class="search-input" type="text" [(ngModel)]="busqueda" placeholder="Buscar tour…">
+                </div>
+                <button class="btn-primary" (click)="abrir()">+ Nuevo Tour</button>
+            </div>
+
+            @if (formVisible) {
+            <div class="form-card">
+                <h3>{{ editingId ? 'Editar Tour' : 'Nuevo Tour' }}</h3>
+                <div class="form-grid">
+                    <div class="fg"><label>Nombre <span class="req">*</span></label>
+                        <input type="text" [(ngModel)]="fTour.nombre">
+                    </div>
+                    <div class="fg"><label>Destino</label>
+                        <select [(ngModel)]="fTour.destinoId">
+                            <option value="">-- Seleccionar --</option>
+                            @for (d of destinos; track d.id) { <option [value]="d.id">{{ d.title }}</option> }
+                        </select>
+                    </div>
+                    <div class="fg"><label>Precio Adulto (S/)</label>
+                        <input type="number" [(ngModel)]="fTour.precioAdulto" min="0">
+                    </div>
+                    <div class="fg"><label>Precio Niño (S/)</label>
+                        <input type="number" [(ngModel)]="fTour.precioNino" min="0">
+                    </div>
+                    <div class="fg"><label>Duración (días)</label>
+                        <input type="number" [(ngModel)]="fTour.duracionDias" min="1">
+                    </div>
+                    <div class="fg"><label>Cupos totales</label>
+                        <input type="number" [(ngModel)]="fTour.cuposTotal" min="1">
+                    </div>
+                    <div class="fg"><label>Dificultad</label>
+                        <select [(ngModel)]="fTour.dificultad">
+                            <option value="fácil">Fácil</option>
+                            <option value="moderado">Moderado</option>
+                            <option value="difícil">Difícil</option>
+                        </select>
+                    </div>
+                    <div class="fg"><label>Imagen URL</label>
+                        <input type="text" [(ngModel)]="fTour.imagenUrl" placeholder="https://…">
+                    </div>
+                    <div class="fg fg-full"><label>Descripción</label>
+                        <input type="text" [(ngModel)]="fTour.descripcion">
+                    </div>
+                    <div class="fg fg-full"><label>Incluye</label>
+                        <input type="text" [(ngModel)]="fTour.incluye" placeholder="Transporte, hotel, guía…">
+                    </div>
+                    <div class="fg fg-full"><label>No incluye</label>
+                        <input type="text" [(ngModel)]="fTour.noIncluye" placeholder="Comidas, entradas…">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="cerrar()">Cancelar</button>
+                    <button class="btn-save" (click)="guardar()">{{ editingId ? 'Actualizar' : 'Crear Tour'
+                        }}</button>
+                </div>
+            </div>
+            }
+
+            <div class="table-card">
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tour</th>
+                                <th>Precio Adulto</th>
+                                <th>Precio Niño</th>
+                                <th>Días</th>
+                                <th>Cupos</th>
+                                <th>Dificultad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (t of filtrados(); track t.id; let i = $index) {
+                            <tr>
+                                <td class="td-n">{{ i+1 }}</td>
+                                <td>
+                                    <div class="cell-tour">
+                                        @if (t.imagenUrl) { <img [src]="t.imagenUrl" class="tour-thumb" alt=""> }
+                                        <div><strong>{{ t.nombre }}</strong><small>{{ t.descripcion | slice:0:55
+                                                }}…</small></div>
+                                    </div>
+                                </td>
+                                <td>S/ {{ t.precioAdulto }}</td>
+                                <td>S/ {{ t.precioNino }}</td>
+                                <td class="td-c">{{ t.duracionDias }}d</td>
+                                <td class="td-c">{{ t.cuposDisponibles }}/{{ t.cuposTotal }}</td>
+                                <td><span class="badge b-dif">{{ t.dificultad }}</span></td>
+                                <td class="td-act">
+                                    <button class="btn-ico edit" (click)="abrirEditar(t)">✏️</button>
+                                    <button class="btn-ico del" (click)="eliminar(t)">🗑️</button>
+                                </td>
+                            </tr>
+                            }
+                            @if (filtrados().length === 0) {
+                            <tr>
+                                <td colspan="8" class="td-empty">No hay tours</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+        

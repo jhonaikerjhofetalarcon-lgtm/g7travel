@@ -1,0 +1,20 @@
+        <section class="section-content">
+            <div class="destinos-grid">
+                @for (d of destinos; track d.id) {
+                <div class="destino-card">
+                    <div class="destino-img" [style.background-image]="'url('+d.bg+')'">
+                        <span class="destino-label">{{ d.label }}</span>
+                    </div>
+                    <div class="destino-body">
+                        <h4>{{ d.title }}</h4>
+                        <p>{{ d.desc }}</p>
+                        <span class="destino-name">🏷 {{ d.name }}</span>
+                    </div>
+                </div>
+                }
+                @if (destinos.length === 0) {
+                <div class="td-empty" style="padding:40px">No hay destinos cargados</div>
+                }
+            </div>
+        </section>
+        

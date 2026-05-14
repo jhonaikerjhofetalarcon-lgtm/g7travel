@@ -19,10 +19,7 @@ public class TourEntity {
   private String destinoId;
 
   @NotNull
-  private Double precioAdulto;
-
-  @NotNull
-  private Double precioNino;
+  private Double precio;
 
   @Min(1)
   private int duracionDias;
@@ -52,11 +49,8 @@ public class TourEntity {
   public String getDestinoId() { return destinoId; }
   public void setDestinoId(String destinoId) { this.destinoId = destinoId; }
 
-  public Double getPrecioAdulto() { return precioAdulto; }
-  public void setPrecioAdulto(Double precioAdulto) { this.precioAdulto = precioAdulto; }
-
-  public Double getPrecioNino() { return precioNino; }
-  public void setPrecioNino(Double precioNino) { this.precioNino = precioNino; }
+  public Double getPrecio() { return precio; }
+  public void setPrecio(Double precioNino) { this.precio = precio; }
 
   public int getDuracionDias() { return duracionDias; }
   public void setDuracionDias(int duracionDias) { this.duracionDias = duracionDias; }
