@@ -43,6 +43,7 @@ export class Reservas implements OnInit {
   cargando = false;
   errorApi: string | null = null;
   reservasConfirmadas = 0;
+  fechaSalida = '2026-05-13';
 
   ngOnInit() {
     this.cargarDestinos();
@@ -85,7 +86,8 @@ export class Reservas implements OnInit {
       (paqueteTexto ? this.destinos.find(d =>
         paqueteTexto.includes((d.title || '').toLowerCase()) ||
         paqueteTexto.includes((d.name || '').toLowerCase())
-      ) : null);
+      ) : null) ||
+      this.destinos.find(d => `${d.title || ''} ${d.name || ''}`.toLowerCase().includes('lago titicaca'));
 
     if (!destino || this.destinoSeleccionado?.id === destino.id) return;
 
@@ -233,11 +235,11 @@ export class Reservas implements OnInit {
     if (this.asientosSeleccionados.length === 0 || !this.destinoSeleccionado) return;
 
     this.pasajeros = this.asientosSeleccionados.map(() => ({
-      nombre: '', 
-      apellido: '', 
-      dni: 0, 
-      email: '', 
-      telefono: ''
+      nombre: 'jhonaiker',
+      apellido: 'alarcon',
+      dni: 0,
+      email: 'jhonaikerjhofetalarcon@gmail.com',
+      telefono: '989898987'
     }));
 
     this.mostrarModal = true;
@@ -258,23 +260,31 @@ export class Reservas implements OnInit {
       for (let i = 0; i < this.asientosSeleccionados.length; i++) {
         const p = this.pasajeros[i];
         const asiento = this.asientosSeleccionados[i];
+        const asientoBackend = asiento.id.startsWith('virtual-')
+          ? await this.api.createAsiento({
+              idAuto: asiento.idAuto,
+              numeroAsiento: asiento.numeroAsiento,
+              estado: 'libre',
+            }).toPromise()
+          : asiento;
 
         const payload: ReservaCreatePayload = {
-          nombre: p.nombre,
-          apellido: p.apellido,
-          email: p.email,
-          telefono: p.telefono,
-          destino: this.paqueteSeleccionado?.titulo || this.destinoSeleccionado.name || this.destinoSeleccionado.title,
-          fechaIda: '2026-06-15',
-          fechaVuelta: '2026-06-20',
-          dni: p.dni,
-          clase: 'economica',
-          notas: this.paqueteSeleccionado
-            ? `Paquete ${this.paqueteSeleccionado.titulo} - Destino ${this.destinoSeleccionado.title} - Asiento ${asiento.numeroAsiento}`
-            : `Asiento ${asiento.numeroAsiento} - ${this.destinoSeleccionado.title}`,
+          nombre: p.nombre || 'jhonaiker',
+          apellido: p.apellido || 'alarcon',
+          email: p.email || 'jhonaikerjhofetalarcon@gmail.com',
+          telefono: p.telefono || '989898987',
+          destino: this.destinoSeleccionado.title || this.destinoSeleccionado.name || 'lago titicaca',
+          fechaIda: this.fechaSalida,
+          fechaVuelta: this.fechaSalida,
+          dni: p.dni || 0,
+          idAsiento: asientoBackend!.id,
+          notas: `3213 - Asiento ${asiento.numeroAsiento}`,
         };
 
-        await this.api.createReserva(payload).toPromise();
+        const reserva = await this.api.createReserva(payload).toPromise();
+        await this.api.reservarAsiento(asientoBackend!.id, reserva!.id).toPromise();
+        asiento.id = asientoBackend!.id;
+        asiento.idReserva = reserva!.id;
       }
 
       this.reservasConfirmadas = this.asientosSeleccionados.length;
